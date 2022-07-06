@@ -1,0 +1,40 @@
+﻿// https://www.spoj.com/problems/SIRNUMS/
+#include<iostream>
+#pragma warning(disable:4996) //_CRT_SECURE_NO_WARNINGS
+using namespace std;
+
+int main() {
+	freopen("../Input.txt", "r", stdin);
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	int t;
+	cin >> t;
+	for (int tc = 0; tc < t; tc++) { 
+		int p, x; cin >> p >> x; // p: số chữ số, x: gấp x lần => 6 5
+		char a[1000009];
+		int temp, carry, temp1;
+		int flag = 0;
+		for (int i = x; i < 10; i++) {
+			a[p - 1] = i + '0';
+			carry = 0; // Phần dư
+			for (int j = p - 2; j >= 0; j--) { // Số tiếp theo
+				a[j] = ((a[j + 1] - '0') * x + carry) % 10 + '0';
+				carry = ((a[j + 1] - '0') * x + carry) / 10;
+			}
+			a[p] = 0;
+			temp = a[0] - '0';
+			temp1 = (temp * x + carry) % 10;
+			carry = (temp * x + carry) / 10;
+			if (temp1 == i && carry == 0) {
+				cout << a << endl;
+				flag = 1;
+				break;
+			}
+		}
+		if (!flag)
+			cout << "Impossible" << endl;
+	}
+	return 0;
+}

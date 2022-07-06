@@ -1,0 +1,117 @@
+// https://www.spoj.com/STP0522/problems/HYDRODAM/
+// https://github.com/hbdhj/spoj-cpp/blob/master/26651_HYDRO.cpp
+
+#include<iostream>
+using namespace std;
+
+int n;
+int a[100000];
+
+int nABS(int val) {
+	if (val < 1) return val*(-1);
+}
+
+int maxArr(int arr[], int len) {
+	int max = arr[0];
+	for (int i = 0; i < len; i++) {
+		if (arr[i] > max) max = a[i];
+	}
+	return max;
+}
+
+int indexMaxArr(int arr[], int len) {
+	int max = arr[0];
+	int index = 0;
+	for (int i = 0; i < len; i++) {
+		if (arr[i] > max) {
+			max = a[i];
+			index = i;
+		}
+	}
+	return index;
+}
+
+int max2Arr(int arr[], int len) {
+	int max = arr[0];
+	for (int i = 0; i < len; i++) {
+		if (arr[i] > max && a[i] != maxArr(arr, n)) max = a[i];
+	}
+	return max;
+}
+
+int indexMax2Arr(int arr[], int len) {
+	int max = arr[0];
+	int index = 0;
+	for (int i = 0; i < len; i++) {
+		if (arr[i] > max && a[i] != maxArr(arr, n)) {
+			max = a[i];
+			index = i;
+		}
+	}
+	return index;
+}
+
+int main() {
+	freopen("Input.txt", "r", stdin);
+	ios_base::sync_with_stdio;
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	cin >> n;
+	for (int i = 0; i < n; i++) {
+		cin >> a[i];
+	}
+
+	int maxWall = maxArr(a, n);
+	int max2Wall = max2Arr(a, n);
+	int index1 = indexMaxArr(a, n);
+	int index2 = indexMax2Arr(a, n);
+
+	if (index1 > index2) {
+		if (index1 == n - 1 && index2 == 0) {
+			int temp = max2Wall * ((nABS(index2 - index1) - 1));
+				for (int i = index2 + 1; i < index1 - 1; i++) {
+					temp -= a[i];
+				}
+			cout << temp;
+		}
+		if (index1 = index2 + 1) {
+			if (index2 == 0 && index1 != n - 1) {
+				int temp = maxWall * ((nABS(index1 - n - 1)));
+				for (int i = index1 + 1; i < n - 1; i++) {
+					temp -= a[i];
+				}
+				cout << temp;
+			}
+			else if (index1 == n - 1 && index2 != 0) {
+				
+			}
+			else {
+
+			}
+		}
+	}
+	else {
+		if (index1 == 0 && index2 == n - 1 || index1 != 0 && index2 == n - 1 || index1 == 0 && index2 != n - 1) {
+			int temp = max2Wall * ((nABS(index2 - index1) - 1));
+
+				for (int i = index2 + 1; i < index1 - 1; i++) {
+					temp -= a[i];
+				}
+			cout << temp;
+		}
+		if (index1 = index2 + 1) {
+			if (index2 == 0) {
+
+			}
+			else if (index1 == n - 1) {
+
+			}
+			else {
+
+			}
+		}
+	}
+
+	return 0;
+}

@@ -1,0 +1,58 @@
+﻿#include<iostream>
+using namespace std;
+// cửa sổ trượt
+char source[1000000];//xâu đầu bài, nhỏ hơn 1 triệu kí tự
+int freq[1000];//mảng dùng để tính xem 1 kí tự xuất hiện bao nhiêu lần trong chuỗi phụ
+			   //freq[1000]={0} sẽ lỗi, làm Mississippi với m = 1 tính ra 7
+ 
+int main() {
+	int m = -1;
+	int length = 0;
+	char temp;
+ 
+	while (true) {
+		cin >> m;
+		if (m == 0)//dừng khi test case bằng 0
+			break;
+		temp = cin.get();
+		cin.getline(source, 1000000);
+		while (source[length] != NULL)//=str(source)? - bug: cout is ambigous 
+			length++;
+		for (int i = 0; i < 1000; i++)//mảng 0, thử bằng assigin từ đầu thì có bug nhỏ
+			freq[i] = 0;
+ 
+		int max_substring = 0;
+		int start = 0;
+		int current = 0;
+		int unique_char = 0;
+ 
+		while (current < length) {
+			if (freq[source[current]] == 0){//Xét 1 kí tự
+				if (unique_char < m) {//nếu số kí tự khác nhau chưa bằng m thì thêm kí tự đó vào xâu con
+					freq[source[current]] = 1;//tăng số kí tự khác nhau lên 1
+					unique_char++;//tăng đuôi cửa lên 1
+					current++;
+				}
+				else if (unique_char == m) {//nếu đang có m kí tư khác nhau
+					int t = current - start;//tính độ dài xâu con
+					if (t > max_substring)
+						max_substring = t;
+					while (unique_char == m) {//khi số kí tự khác nhau còn bằng m
+						freq[source[start]]--;
+						if (freq[source[start]] == 0)//loại bỏ hoàn toàn kí tự (nếu nó xuất hiện nhiều lần)
+							unique_char--;//giảm số kí tự khác nhau
+						start++;//dịch chuyển khung cửa sổ
+					}
+				}
+			}
+			else {//nếu có kí tự đó rồi thì chỉ tăng tần suất lên 1, tăng đuôi lên 1
+					freq[source[current]]++;
+					current++;
+			}
+		}
+		int t = current - start;
+		if (t > max_substring)
+			max_substring = t;
+		cout << max_substring << endl;
+	}
+}

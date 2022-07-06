@@ -1,0 +1,107 @@
+﻿// https://www.spoj.com/problems/QKP
+// https://thuattoan.phamvanlam.com/spoj-com-thuat-toan-bai-qkp-queens-knights-and-pawns/
+// https://ideone.com/6GE6DR
+
+#include<iostream>
+#pragma warning(disable:4996) //_CRT_SECURE_NO_WARNINGS
+using namespace std;
+
+const int range = 10009;
+char chess[range][range];
+const char safe = '0', unsafe = 'x';
+int n, m;
+
+int K_row[8] = { -1,-2, 1, 2,-2,-1, 2, 1 };
+int K_col[8] = { 2, 1, 2, 1,-1,-2,-1,-2 };
+
+int Q_row[8] = { 0, 0, 1, 1, 1,-1,-1,-1 };
+int Q_col[8] = { 1,-1,-1, 0, 1,-1, 0, 1 };
+
+void Input(int n, int m) {
+	for (int i = 1; i <= n; i++) {
+		for (int j = 1; j <= m; j++) {
+			chess[i][j] = safe;
+		}
+	}
+
+	int num_q; cin >> num_q;
+	while (num_q--) {
+		int i, j; cin >> i >> j;
+		chess[i][j] = 'q';
+	}
+
+	int num_k; cin >> num_k;
+	while (num_k--) {
+		int i, j; cin >> i >> j;
+		chess[i][j] = 'k';
+	}
+
+	int num_p; cin >> num_p;
+	while (num_p--) {
+		int i, j; cin >> i >> j;
+		chess[i][j] = 'p';
+	}
+}
+
+bool checkOut(int x, int y) { // Kiểm tra biên xem có bị tràn biên không
+	if (x >= 1 && x <= n && y >= 1 && y <= m) return true;
+	return false;
+}
+
+int main() {
+	freopen("../Input.txt", "r", stdin);
+	
+	while (true) {
+		int step = 1;
+		ios_base::sync_with_stdio;
+		cin.tie(NULL);
+		cout.tie(NULL);
+
+		cin >> n >> m;
+		if (n == 0 && m == 0) break;
+		int res = n * m;
+		cin.ignore();
+		
+		Input(n, m);
+		for (int i = 1; i <= n; i++) {
+			for (int j = 1; j <= m; j++) {
+				if (chess[i][j] == 'k') {
+					chess[i - 1][j - 2] = 'x';
+					chess[i + 1][j - 2] = 'x';
+					chess[i + 2][j - 1] = 'x';
+					chess[i + 2][j + 1] = 'x';
+					chess[i - 1][j + 2] = 'x';
+					chess[i + 1][j + 2] = 'x';
+					chess[i - 2][j - 1] = 'x';
+					chess[i - 2][j + 1] = 'x';
+				}
+				if (chess[i][j] == 'q') {
+					for (int a = i; a < n; i++) {
+						for (int b = j; b < m; b++) {
+							if (chess[a][b] != '0' || chess[a][b] == 'x') {
+								break;
+							}
+							else {
+								chess[a - 1][b - 1] = 'x';
+								chess[a + 1][b - 1] = 'x';
+								chess[a + 1][b - 1] = 'x';
+								chess[a - 1][b + 1] = 'x';
+								chess[a][b - 1] = 'x';
+								chess[a][b + 1] = 'x';
+								chess[a - 1][b] = 'x';
+								chess[a + 1][b] = 'x';
+							}
+						}
+					}
+				}
+			}
+		}
+		for (int i = 1; i <= n; i++) {
+			for (int j = 1; j <= m; j++) {
+				if (chess[i][j] == safe) res++;
+			}
+		}
+		cout << "Board " << step << " has " << res << " safe squares." << endl;
+		step++;
+	}
+}

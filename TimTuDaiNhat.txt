@@ -1,0 +1,77 @@
+﻿// 
+
+#include<iostream>
+using namespace std;
+
+char s[10000];
+
+int lenString(char str[]) {
+	int len = 0;
+	while (str[len] != '\0') len++;
+	return len;
+}
+
+int maxArr(int arr[], int size) {
+	int max = arr[0];
+	for (int i = 0; i < size; i++) {
+		if (arr[i] > max) max = arr[i];
+	}
+	return max;
+}
+
+void clearString(char str[], int length) {
+	for (int i = 0; i < length; i++) {
+		str[i] = ' ';
+	}
+}
+
+int main() {
+	freopen("Input.txt", "r", stdin);
+	ios_base::sync_with_stdio;
+	cin.tie(0);
+	cout.tie(0);
+
+	cin.getline(s, 10000);
+	int len = lenString(s);
+	s[len] = ' '; // Tạo 1 kí tự ảo ở cuối
+	len++;
+
+	int cnt = 0;
+	int lenWord = 0;
+	int word[10000];
+	
+	// Đếm độ dài các từ
+	for (int i = 0; i < len; i++) {
+		if (s[i] != ' ') {
+			cnt++;
+		}
+		if (s[i] == ' ' || s[i] == len - 1) {
+			word[lenWord++] = cnt;
+			cnt = 0;
+		}
+	}
+	char check[10000];
+	int maxLengthWord = maxArr(word, lenWord);
+	int lenCheck = 0;
+	
+	// Tìm từ dài nhất
+	for (int i = 0; i < len; i++) {
+		if (s[i] != ' ') {
+			check[lenCheck++] = s[i];
+		}
+		if (s[i] == ' ' || s[i] == len - 1) {
+			if (maxLengthWord == lenCheck) { // Độ dài từ đang xét bằng độ dài max
+				for (int j = 0; j < lenCheck; j++) {
+					cout << check[j];
+				}
+			}
+			else {
+				lenCheck = 0;
+				clearString(check, lenCheck);
+			}
+		}
+	}
+	lenCheck = 0;
+	clearString(check, lenCheck);
+	return 0;
+}

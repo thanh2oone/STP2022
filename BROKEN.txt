@@ -1,0 +1,78 @@
+﻿// https://www.spoj.com/problems/BROKEN/
+// https://ideone.com/FHdLZt
+
+#include<iostream>
+#pragma warning(disable:4996) //_CRT_SECURE_NO_WARNINGS
+using namespace std;
+
+char s[100000];
+int cnt[100000];
+
+int main() {
+	freopen("../Input.txt", "r", stdin);
+	ios_base::sync_with_stdio(false);
+
+	int len = 0, m = -1;
+	char gar;
+	while (1) {
+		cin >> m;
+		if (m == 0) break;
+		gar = cin.get();
+
+		//Calculate the length of string
+		len = 0;
+		cin.getline(s, 100000);
+		while (s[len] != '\0') len++;
+	
+		//Count the number of character
+		for (int i = 0; i < 100000; i++) {
+			cnt[i] = 0;
+		}
+
+		int start = 0, curr = 0, maxSubStr = 0, numDiffChar = 0;	
+		while (curr < len) {
+			// Giá trị mảng đếm = 0 nghĩa là kí tự đó chưa tồn tại
+			if (cnt[s[curr]] == 0) {
+				// Nếu số kí tự khác nhau nhỏ hơn m thì ta sẽ cho kí tự đó vào xâu con
+				// đồng thời tăng giá trị biến đếm số lần xuất hiện của kí tự, số kí tự khác nhau
+				// và chỉ số hiện tại
+				if (numDiffChar < m) {
+					cnt[s[curr]] = 1;
+					numDiffChar++;
+					curr++;
+				}
+				// Nếu số kí tự khác nhau đã bằng m rồi
+				// thì ta không thể thêm kí tự mới vào, khi đó số kí tự khác nhau sẽ là m + 1
+				// Do đó tôi phải dịch chỉ số bắt đầu lên cho đến khi số kí tự khác nhau < m
+				// Lúc đó mới có thể thêm kí tự mới.
+				else if (numDiffChar == m) {
+					int temp = curr - start;
+					if (temp > maxSubStr) maxSubStr = temp;
+
+					while (numDiffChar == m) {
+						cnt[s[start]]--;
+						if (cnt[s[start]] == 0) numDiffChar--;
+						start++;
+					}
+				}
+			}
+			else {
+				// Trường hợp kí tự đó đã xuất hiện trong xâu con rồi
+				// thì tôi chỉ cần biến đếm số lần xuất hiện của kí tự đó.
+				cnt[s[curr]]++;
+				curr++;
+			}
+		}
+		int temp = curr - start;
+		if (temp > maxSubStr) maxSubStr = temp;
+		cout << maxSubStr << endl;
+	}
+	return 0;
+}
+
+/*
+Một bàn phím có rất nhiều phím hỏng, chỉ còn k phím hoạt động, cho 1 câu văn bất kì, tính xem với k phím đó thì chuỗi con có độ dài lớn nhất (của câu văn trên) dài bao nhiêu?:
+Bài này có 2 cách tiếp cận: cách cổ điển và cách văn vẻ :)). Với cách cổ điển, các bạn có thể vét cạn, tìm tất cả chuỗi con, rồi đếm tất cả chuỗi con có số kí tự thoả mãn với số lượng phím còn lại.
+Tuy nhiên, cách này có thể rắc rối nếu câu văn được cho siêu dài, Vì vậy chúng ta có cách 2: cửa sổ trượt. Ý tưởng là tạo ra 1 khung cửa sổ chứa được k kí tự khác nhau, cứ đủ k kí tự thì ta đo độ dài của khung cửa 1 lần, bao giờ đi hết chuỗi thì thôi. Code mình có chú thích, hãy nghiền ngẫm 1 chút, thêm 1 chút nháp tay và có thể debug step by step các b sẽ thấy được tư tưởng bài toán.
+Bài này có độ khó hơi cao hơn mức dễ 1 chút, tuy nhiên, mẹo làm bài và tư tưởng bài toán là rất hay và có thể áp dụng cho các vấn đề sau này 
+*/

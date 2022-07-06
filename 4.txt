@@ -1,0 +1,45 @@
+// https://www.spoj.com/STP0522/problems/REROAD/
+// https://ideone.com/bTzhHM
+	
+#include<iostream>
+using namespace std;
+
+int n, k;
+int road[10000];
+int C1[100000];
+
+int main() {
+	freopen("Input.txt", "r", stdin);
+	ios_base::sync_with_stdio;
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	cin >> n >> k;
+	for (int i = 0; i < n; i++) {
+		cin >> road[i];
+	}
+
+	for (int i = 0; i < n; i++) {
+		C1[i] = 0;
+	}
+	int countC1 = 0;
+	int lenMark = 0;
+	for (int i = 0; i < n + 1; i++) {	
+		if (road[i] == 1) countC1++;
+		else {
+			C1[lenMark++] = countC1;
+			countC1 = 0;
+		}
+	}
+	
+	int maxRoad = 0;
+	for (int i = 0; i < lenMark - k; i++) {
+		int sum = 0;
+		for (int j = 0; j < k + 1; j++) {
+			sum += C1[j + i];
+		}
+		if (sum > maxRoad) maxRoad = sum;
+	} 
+	cout << maxRoad + k << endl;
+	return 0;
+}

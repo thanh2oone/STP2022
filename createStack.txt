@@ -1,0 +1,20 @@
+int st[1000];
+int sizeStack = 0;
+
+void push(int value) {
+	sizeStack++;
+	st[sizeStack] = value;
+}
+
+int top() {
+	return st[sizeStack];
+}
+
+void pop() {
+	sizeStack--;
+}
+
+bool empty() {
+	if (sizeStack == 0) return true;
+	return false;
+}

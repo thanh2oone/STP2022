@@ -1,0 +1,47 @@
+﻿// https://www.spoj.com/PTIT/problems/SSAM019E/
+#include<iostream>
+#pragma warning(disable:4996) //_CRT_SECURE_NO_WARNINGS
+using namespace std;
+
+int money[30];
+
+void sort(int arr[], int n) {
+	for (int i = 0; i < n; i++) {
+		for (int j = i + 1; j < n; j++) {
+			if (arr[i] < arr[j]) {
+				int temp = arr[i];
+				arr[i] = arr[j];
+				arr[j] = temp;
+			}
+		}
+	}
+}
+
+int main() {
+	freopen("../Input.txt", "r", stdin);
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	int n, S; cin >> n >> S; //VD: S = 28
+
+	for (int j = 0; j < n; j++) {
+		money[j] = 0;
+	}
+	for (int j = 0; j < n; j++) {
+		int temp; cin >> temp;
+		money[j] += temp; // 1 2 5
+	}
+
+	sort(money, n); // Sắp xếp giảm dần để chọn từ tờ tiền lớn nhất: 5 2 1
+
+	int sumMoney = 0;
+	int i = 0;
+
+	for (int i = 0; i < 3; i++) {
+		sumMoney += S / money[i]; //sumMoney lần lượt = 5 1 1  
+		S %= money[i]; //needMoney lần lượt = 3 1 0
+	}
+	cout << sumMoney; // Tổng số tờ
+	return 0;
+}

@@ -1,0 +1,48 @@
+// https://www.spoj.com/STP0522/problems/FINDSR/
+	
+#include<iostream>
+using namespace std;
+
+char s[10000];
+char sub[100000];
+
+int length(char s[]) {
+	int len = 0;
+	while (s[len] != NULL) len++;
+	return len;
+}
+
+int main() {
+	freopen("Input.txt", "r", stdin);
+	ios_base::sync_with_stdio;
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	while (1) {
+		cin >> s;
+		if (s[0] == '*') break;
+
+		int lenS = length(s);
+		int lenSub = 0;
+		int cnt = 0;
+		for (int i = 1; i < lenS; i++) {
+			if (s[i] == s[0]) {
+				for (int j = 0; j < i; j++) {
+					sub[lenSub++] = s[j];
+				}
+				int lenSubTemp = lenSub;
+				int temp = 0;
+				for (int j = i + lenSub; j >= i + 1; j -= lenSub) {
+					//if (s[j] == sub[lenSubTemp--]) temp++;
+					cout << s[j] << " ";
+				}
+				//if (temp % lenSub == 0) cnt += temp / lenSub;
+				//cout << temp;
+				break;
+			}
+		}
+		//cout << cnt;
+	}
+
+	return 0;
+}
